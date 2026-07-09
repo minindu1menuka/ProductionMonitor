@@ -29,12 +29,12 @@ export default function App() {
   useEffect(() => {
     async function loadData() {
       try {
-        const prodRes = await axios.get('http://localhost:5000/api/production');
+        const prodRes = await axios.get('https://productionmonitor.onrender.com/api/production');
         setProductionRecords(prodRes.data);
       } catch (e) { console.error(e); }
 
       try {
-        const brkRes = await axios.get('http://localhost:5000/api/breakdowns');
+        const brkRes = await axios.get('https://productionmonitor.onrender.com/api/breakdowns');
         setBreakdownRecords(brkRes.data);
       } catch (e) { console.error(e); }
     }
@@ -49,7 +49,7 @@ export default function App() {
 
   const handleAddProductionRecord = async (newRec) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/production', newRec);
+      const response = await axios.post('https://productionmonitor.onrender.com/api/production', newRec);
       const recordWithId = { ...newRec, id: response.data.id }; // DB එකෙන් දෙන අලුත් ID එක ගන්නවා
       setProductionRecords([recordWithId, ...productionRecords]);
       showToast('Production record saved to database!');
@@ -63,10 +63,10 @@ export default function App() {
     try {
       if (updatedRec.id && !updatedRec.id.toString().startsWith('prod-')) {
         // If it's a real DB ID, update the DB
-        await axios.put(`http://localhost:5000/api/production/${updatedRec.id}`, updatedRec);
+        await axios.put(`https://productionmonitor.onrender.com/api/production/${updatedRec.id}`, updatedRec);
       } else {
         // Fallback if ID is messy, save as new
-        await axios.post('http://localhost:5000/api/production', updatedRec);
+        await axios.post('https://productionmonitor.onrender.com/api/production', updatedRec);
       }
 
       const updated = productionRecords.map((r) => (r.id === updatedRec.id ? updatedRec : r));
@@ -83,7 +83,7 @@ export default function App() {
 
   const handleDeleteProductionRecord = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/production/${id}`);
+      await axios.delete(`https://productionmonitor.onrender.com/api/production/${id}`);
       const updated = productionRecords.filter((r) => r.id !== id);
       setProductionRecords(updated);
       showToast('Production record deleted from database.', 'info');
@@ -96,7 +96,7 @@ export default function App() {
   const handleDeleteRow = async (date) => {
     try {
 
-      await axios.delete(`http://localhost:5000/api/production/day/${date}`);
+      await axios.delete(`https://productionmonitor.onrender.com/api/production/day/${date}`);
 
       const updatedRecords = productionRecords.filter((rec) => rec.date !== date);
       setProductionRecords(updatedRecords);
@@ -116,7 +116,7 @@ export default function App() {
     };
 
     try {
-      const res = await axios.post('http://localhost:5000/api/breakdowns', enrichedBrk);
+      const res = await axios.post('https://productionmonitor.onrender.com/api/breakdowns', enrichedBrk);
       const savedBrk = { ...enrichedBrk, id: res.data.id };
 
       const updated = [savedBrk, ...breakdownRecords];
@@ -135,7 +135,7 @@ export default function App() {
 
     try {
 
-      await axios.delete(`http://localhost:5000/api/breakdowns/day/${formattedDate}`);
+      await axios.delete(`https://productionmonitor.onrender.com/api/breakdowns/day/${formattedDate}`);
 
 
       const newRecords = [];
@@ -143,7 +143,7 @@ export default function App() {
         const minutes = machineMinutes[m] || 0;
         if (minutes > 0) {
           const payload = { year, month, day, machineName: m, lossDuration: minutes, date: formattedDate, reason: '' };
-          const res = await axios.post('http://localhost:5000/api/breakdowns', payload);
+          const res = await axios.post('https://productionmonitor.onrender.com/api/breakdowns', payload);
           newRecords.push({ ...payload, id: res.data.id });
         }
       }
@@ -166,7 +166,7 @@ export default function App() {
     const formattedDate = `${year}-${monthMap[month] || '01'}-${day.toString().padStart(2, '0')}`;
 
     try {
-      await axios.delete(`http://localhost:5000/api/breakdowns/day/${formattedDate}`);
+      await axios.delete(`https://productionmonitor.onrender.com/api/breakdowns/day/${formattedDate}`);
       const filtered = breakdownRecords.filter((b) => b.date !== formattedDate);
 
       setBreakdownRecords(filtered);
@@ -204,7 +204,7 @@ export default function App() {
   const handleWipeDatabase = async () => {
     try {
 
-      await axios.delete('http://localhost:5000/api/wipe');
+      await axios.delete('https://productionmonitor.onrender.com/api/wipe');
 
 
       setProductionRecords([]);

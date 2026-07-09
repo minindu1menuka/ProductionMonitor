@@ -15,7 +15,7 @@ export function ProductionAnalysisReport() {
   useEffect(() => {
     const fetchAllParts = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/parts');
+        const res = await axios.get('https://productionmonitor.onrender.com/api/parts');
         setAllParts(res.data);
       } catch (error) {
         console.error("Error fetching parts:", error);
@@ -30,7 +30,7 @@ export function ProductionAnalysisReport() {
 
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:5000/api/items/${sku}`);
+      const response = await axios.get(`https://productionmonitor.onrender.com/api/items/${sku}`);
       if (response.data.length === 0) {
         alert("No data found for this SKU. If you want to create it, use the 'Create New SKU' option.");
       } else {
@@ -64,7 +64,7 @@ export function ProductionAnalysisReport() {
     if (!isConfirmed) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/items/sku/${skuName}`);
+      await axios.delete(`https://productionmonitor.onrender.com/api/items/sku/${skuName}`);
       const updatedSKUs = [...loadedSKUs];
       updatedSKUs.splice(skuIndex, 1);
       setLoadedSKUs(updatedSKUs);
@@ -150,7 +150,7 @@ export function ProductionAnalysisReport() {
 
     if (!item.isNew) {
       try {
-        await axios.delete(`http://localhost:5000/api/items/${item.id}`);
+        await axios.delete(`https://productionmonitor.onrender.com/api/items/${item.id}`);
       } catch (error) {
         console.error("Error deleting item:", error);
         return alert("An error occurred while deleting.");
@@ -168,9 +168,9 @@ export function ProductionAnalysisReport() {
         for (let item of group.items) {
           if (item.isNew) {
             item.SKU_Qty = group.masterQty;
-            await axios.post(`http://localhost:5000/api/items`, item);
+            await axios.post(`https://productionmonitor.onrender.com/api/items`, item);
           } else {
-            await axios.put(`http://localhost:5000/api/items/${item.id}`, {
+            await axios.put(`https://productionmonitor.onrender.com/api/items/${item.id}`, {
               SKU_Qty: group.masterQty, Qty_Per_Unit: item.Qty_Per_Unit,
               No_Of_Panels: item.No_Of_Panels, SQM: item.SQM, Edge_Band_LM: item.Edge_Band_LM
             });
@@ -182,7 +182,7 @@ export function ProductionAnalysisReport() {
       const refreshedSKUs = [];
       for (let group of loadedSKUs) {
         if (group.items.length > 0) {
-          const res = await axios.get(`http://localhost:5000/api/items/${group.sku}`);
+          const res = await axios.get(`https://productionmonitor.onrender.com/api/items/${group.sku}`);
           refreshedSKUs.push({ sku: group.sku, masterQty: group.masterQty, items: res.data });
         }
       }

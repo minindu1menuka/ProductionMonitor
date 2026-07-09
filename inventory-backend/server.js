@@ -13,7 +13,7 @@ app.use(express.json());
 //   password: '*******', 
 //   database: 'furniture_db' 
 // });
-// sdfdsdfffdg
+// sdfdsdfffdgdfgfd
 
 const db = mysql.createConnection({
   host: process.env.DB_HOST,

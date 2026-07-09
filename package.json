@@ -1,0 +1,17 @@
+{
+  "name": "inventory-main",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "server": "cd inventory-backend && node server.js",
+    "client": "cd inventory-frontend && npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^9.2.3"
+  }
+}
